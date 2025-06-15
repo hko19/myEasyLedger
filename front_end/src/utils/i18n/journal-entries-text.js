@@ -108,7 +108,7 @@ export const journalEntriesText = {
         "Close": "關閉",
 
         "Transaction must be assigned to an account.": "交易紀錄必需要有針對的帳戶。",
-        "Transaction must be given a description.": "交易記錄必需要有描述。",
+        "Transaction must be given a description.": "交易記錄的「描述」欄不能空白不填。",
         "Line-items must be assigned to an account or category.": "單行項目必需要有針對的帳戶或類別。",
         "Please provide an amount for each item.": "請為每個項目記錄下交易金額。",
         "Please specify a transaction type for each item.": "請為每個單行項目指定其交易類別。",
