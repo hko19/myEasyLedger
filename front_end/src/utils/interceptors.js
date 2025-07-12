@@ -1,6 +1,6 @@
 import { API_BASE_URL, ACCESS_TOKEN, REFRESH_TOKEN } from "./constants.js"
 
-var axios = require("axios");
+import axios from "axios";
 
 async function refreshAccessToken() {
     let jwtToken = localStorage.getItem(REFRESH_TOKEN);
