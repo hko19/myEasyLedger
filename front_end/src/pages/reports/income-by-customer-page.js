@@ -67,9 +67,9 @@ function IncomeByCustomerPage() {
 
     return (
         <div>
-            <h1 className="page-header">
+            <h3 className="page-header">
                 {reportTypeListText[appContext.locale]["Income Distribution (by Customer)"]} 
-            </h1>
+            </h3>
             <div>
                 {appContext.isLoading
                     ? <LoadingSpinner big/>

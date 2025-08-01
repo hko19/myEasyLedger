@@ -81,9 +81,9 @@ function CategoriesPage(props) {
 
     return (
         <>
-            <h1 className="">
+            <h3 className="">
                 {chartOfAccountsText[appContext.locale]["Categories"]}
-            </h1>
+            </h3>
             <Card className="very-rounded my-4 shadow-sm bg-light">
                 <CardBody>
                     <Nav pills justified>

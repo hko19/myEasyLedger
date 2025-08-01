@@ -132,9 +132,9 @@ function AccountTransactionsReportPage(props) {
 
     return (
         <div>
-            <h1 className="page-header">
+            <h3 className="page-header">
                 {reportsText[appContext.locale]["Account Transactions Report"]}
-            </h1>
+            </h3>
             <Card className="very-rounded shadow-sm bg-light my-4">
                 <CardBody>
                     <Alert isOpen={invalidDateAlert} color="danger">

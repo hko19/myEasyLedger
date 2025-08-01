@@ -32,9 +32,9 @@ function NetWorthReportPage() {
 
     return (
         <div>
-            <h1 className="page-header">
+            <h3 className="page-header">
                 {netWorthReportText[appContext.locale]["Net Worth Report"]} 
-            </h1>
+            </h3>
             <div>
                 {appContext.isLoading
                     ? <LoadingSpinner big/>

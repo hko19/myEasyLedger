@@ -31,9 +31,9 @@ function IncomeStatementPage() {
 
     return (
         <div>
-            <h1>
+            <h3>
                 {incomeStatementReportText[appContext.locale]["Income Statement Report"]}
-            </h1>
+            </h3>
             <div>
                 {appContext.isLoading
                     ? <LoadingSpinner big/>

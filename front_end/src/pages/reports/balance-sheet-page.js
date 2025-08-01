@@ -33,9 +33,9 @@ function BalanceSheetPage() {
 
     return (
         <div>
-            <h1>
+            <h3>
                 {balanceSheetReportText[appContext.locale]["Balance Sheet"]}
-            </h1>
+            </h3>
             <div>
                 {appContext.isLoading
                     ? <LoadingSpinner big/>

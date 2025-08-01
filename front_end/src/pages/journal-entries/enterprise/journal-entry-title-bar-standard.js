@@ -10,9 +10,9 @@ function JournalEntryTitleBarStandard({ className, handleCreateAJournalEntryButt
 
     return (
         <div className={"d-none d-sm-flex justify-content-between align-items-center " + className}>
-            <h1 className="my-0">
+            <h3 className="my-0">
                 {journalEntriesText[appContext.locale]["Journal Entries"]}
-            </h1>
+            </h3>
             <div id="add-an-entry-button">
                 <button
                     className="btn btn-primary"
