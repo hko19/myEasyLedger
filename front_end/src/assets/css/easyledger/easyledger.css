@@ -11,6 +11,10 @@
     --dark-mode-sidebar-text-color: #dddddd;
     --base-gridline-color: rgba(0, 0, 0, 0.1);
     --dark-mode-gridline-color: rgba(255, 255, 255, 0.1);
+    
+    /* Override Bootstrap variables for ahref link color*/
+    --bs-primary: rgb(69, 162, 209); 
+    --bs-primary-rgb: 69, 162, 209;
 
     /*I guess bootstrap doesn't package these anymore after migrating from v4 to v5*/
     --breakpoint-xs: 0;
@@ -47,8 +51,9 @@ nav ol {
     padding: 0px;
 }
 
-/* Override Bootstrap Defaults*/
+/* Override ahref link color not using CSS variables */
 a {
+    color: var(--bs-primary);
     text-decoration: none;
 }
 
