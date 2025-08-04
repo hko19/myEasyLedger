@@ -67,9 +67,9 @@ function ExpensesByVendorPage() {
 
     return (
         <div>
-            <h1 className="page-header">
+            <h3 className="page-header">
                 {reportTypeListText[appContext.locale]["Expense Distribution (by Vendor)"]} 
-            </h1>
+            </h3>
             <div>
                 {appContext.isLoading
                     ? <LoadingSpinner big/>

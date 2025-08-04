@@ -57,13 +57,13 @@ export const loginV3Text = {
 
         "Forgot Password?": "忘了你的密碼嗎？",
         "Find Your Account": "搜尋你的帳戶",
-        "Please enter your email to search for your account.": "請輸入你的電郵來找你的帳戶。",
-        "Could not find an account registered with this email address.": "找不到用該電郵註册的帳戶。",
+        "Please enter your email to search for your account.": "忘了密碼嗎？請輸入你的電郵來找你的記帳用戶帳號。",
+        "Could not find an account registered with this email address.": "找不到用該電郵註册的帳號。",
         "Go Back": "返回",
         "Submit": "送出",
 
         "Reset Password Code" : "確認碼",
-        "Incorrect password reset code." : "確試碼有誤",
+        "Incorrect password reset code." : "確認碼有誤",
         "Expired code." : "確認碼已過期。",
         "Verify Your Email": "確認你的電郵",
         "Please enter the six-digit code we have sent to your email.": "請輸入我們寄到你電郵箱的「確認碼」（6碼）。",

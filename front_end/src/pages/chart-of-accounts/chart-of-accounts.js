@@ -79,9 +79,9 @@ function ChartOfAccounts(props) {
 
     return (
         <>
-            <h1 className="">
+            <h3>
                 {chartOfAccountsText[appContext.locale]["Chart of Accounts"]}
-            </h1>
+            </h3>
             <Card className="very-rounded my-4 shadow-sm bg-light">
                 <CardBody>
                     <Nav pills justified>

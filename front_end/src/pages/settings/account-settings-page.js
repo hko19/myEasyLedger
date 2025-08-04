@@ -35,9 +35,9 @@ function AccountSettingsPage() {
 
     return (
         <div>
-            <h1 className="page-header">
+            <h3 className="page-header">
                 {settingsText[appContext.locale]["Account Settings"]}
-            </h1>
+            </h3>
             <Card className="very-rounded mb-3 shadow-sm">
                 <CardBody>
                     <div>

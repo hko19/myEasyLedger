@@ -9,9 +9,9 @@ function Reports() {
     return (
         <div>
 
-            <h1>
+            <h3> 
                 {reportsText[appContext.locale]["Reports"]}
-            </h1>
+            </h3>
             <div>
                 {appContext.isLoading? <LoadingSpinner big /> : <ReportTypeList />}
             </div>

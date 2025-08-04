@@ -70,11 +70,11 @@ function ExpensesByAccountPage() {
 
     return (
         <div>
-            <h1 className="page-header">
+            <h3 className="page-header">
                 {appContext.isEnterprise
                     ? incomeStatementReportText[appContext.locale]["Expense Distribution (by Account)"]
                     : reportTypeListText[appContext.locale]["Expense Distribution (by Category)"]} 
-            </h1>
+            </h3>
             <div>
                 {appContext.isLoading
                     ? <LoadingSpinner big/>

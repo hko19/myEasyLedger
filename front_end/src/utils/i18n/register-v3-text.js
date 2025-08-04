@@ -48,7 +48,7 @@ export const registerV3Text = {
     "zh-TW": {
         "App description": "易記帳。",
         "Sign Up": "建立新使用帳號",
-        "Create your myEasyLedger Account.": "建立一個新的使用帳號。",
+        "Create your myEasyLedger Account.": "建立一個新的記帳用戶帳號。",
         "Name": "您的名字",
         "First name": "姓",
         "Last name": "名",

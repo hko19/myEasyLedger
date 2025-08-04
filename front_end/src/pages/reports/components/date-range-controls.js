@@ -1,3 +1,23 @@
+/**
+ * DateRangeControls component
+ * 
+ * Renders controls for selecting date ranges and presets for financial reports.
+ * Allows users to select custom or preset date ranges, compare multiple ranges,
+ * and toggle detailed view options. Handles validation and triggers data fetches
+ * based on selected date ranges.
+ *
+ * @component
+ * @param {Object} props - Component props
+ * @param {function} props.parentComponentDataFetchFunction - Async function to fetch data, receives an array of date range DTOs.
+ * @param {boolean} props.detailedView - Whether detailed view is enabled.
+ * @param {function} props.toggleDetailedView - Function to toggle detailed view.
+ * @param {boolean} props.noDetailedView - If true, hides the detailed view toggle.
+ * @param {boolean} props.singleDate - If true, only displays end dates (no start dates).
+ * @param {string} [props.defaultStartDate] - Optional default start date.
+ * @param {string} [props.defaultEndDate] - Optional default end date.
+ * @returns {JSX.Element} The rendered component.
+ */
+
 import React from 'react';
 import { Alert, Card, CardBody } from 'reactstrap';
 import { PageSettings } from '../../../config/page-settings';
@@ -162,6 +182,7 @@ function DateRangeControls({parentComponentDataFetchFunction, detailedView,
                                                         placeholder={balanceSheetRenderText[appContext.locale]["yyyy-mm-dd"]} 
                                                         value={datesToRequest[i].endDate} 
                                                         onChange={event => handleChangeEndDate(event.target.value, i)} 
+                                                        style = {{colorScheme: appContext.colorScheme === 'dark' ? 'dark' : 'light'}}
                                                     />
                                                 </div>
                                             </>
@@ -175,6 +196,7 @@ function DateRangeControls({parentComponentDataFetchFunction, detailedView,
                                                         placeholder={incomeStatementRenderText[appContext.locale]["yyyy-mm-dd"]} 
                                                         className="form-control" value={datesToRequest[i].startDate} 
                                                         onChange={event => handleChangeStartDate(event.target.value, i)} 
+                                                        style = {{colorScheme: appContext.colorScheme === 'dark' ? 'dark' : 'light'}}
                                                     />
                                                 </div>
                                                 <label className="my-0 text-end col-1 px-2">
@@ -186,6 +208,7 @@ function DateRangeControls({parentComponentDataFetchFunction, detailedView,
                                                         placeholder={incomeStatementRenderText[appContext.locale]["yyyy-mm-dd"]} 
                                                         className="form-control" value={datesToRequest[i].endDate} 
                                                         onChange={event => handleChangeEndDate(event.target.value, i)}
+                                                        style = {{colorScheme: appContext.colorScheme === 'dark' ? 'dark' : 'light'}}
                                                     />
                                                 </div>
                                             </>
@@ -230,6 +253,7 @@ function DateRangeControls({parentComponentDataFetchFunction, detailedView,
                                                 className="form-control" 
                                                 value={datesToRequest[i].endDate} 
                                                 onChange={event => handleChangeEndDate(event.target.value, i)} 
+                                                style = {{colorScheme: appContext.colorScheme === 'dark' ? 'dark' : 'light'}}
                                             />
                                         </div>
                                         : <>
@@ -243,6 +267,7 @@ function DateRangeControls({parentComponentDataFetchFunction, detailedView,
                                                     className="form-control" 
                                                     value={datesToRequest[i].startDate} 
                                                     onChange={event => handleChangeStartDate(event.target.value, i)} 
+                                                    style = {{colorScheme: appContext.colorScheme === 'dark' ? 'dark' : 'light'}}
                                                 />
                                             </div>
                                             <div className="d-flex justify-content-between text-start align-items-center mb-2">
@@ -255,6 +280,7 @@ function DateRangeControls({parentComponentDataFetchFunction, detailedView,
                                                     className="form-control" 
                                                     value={datesToRequest[i].endDate} 
                                                     onChange={event => handleChangeEndDate(event.target.value, i)} 
+                                                    style = {{colorScheme: appContext.colorScheme === 'dark' ? 'dark' : 'light'}}
                                                 />
                                             </div>
                                         </>

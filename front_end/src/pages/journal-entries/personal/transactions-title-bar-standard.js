@@ -10,9 +10,9 @@ function TransactionsTitleBarStandard({ className, handleCreateTransactionButton
 
     return (
         <div className={"d-none d-sm-flex justify-content-between align-items-center " + className}>
-            <h1 className="my-0">
+            <h3 className="my-0">
                 {journalEntriesText[appContext.locale]["Transactions"]}
-            </h1>
+            </h3>
             <div id="add-a-transaction-button">
                 <button
                     className="btn btn-primary"

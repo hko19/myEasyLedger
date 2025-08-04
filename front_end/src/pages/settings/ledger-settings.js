@@ -8,9 +8,9 @@ function LedgerSettings(props) {
     const appContext = React.useContext(PageSettings);
     return(
         <div>
-            <h1 className="page-header">
+            <h3 className="page-header">
                 {settingsText[appContext.locale]["Ledger Settings"]}
-            </h1>
+            </h3>
             <OrganizationSettings organizationId={props.match.params.organizationId} />
             <OrganizationRoster organizationId={props.match.params.organizationId}/>
         </div>

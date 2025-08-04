@@ -29,9 +29,9 @@ function CashFlowPage() {
     }
     return(
         <div>
-            <h1>
+            <h3>
                 {cashFlowReportText[appContext.locale]["Cash Flow Statement"]}
-            </h1>
+            </h3>
             <div>
                 {appContext.isLoading
                     ? <LoadingSpinner big/>

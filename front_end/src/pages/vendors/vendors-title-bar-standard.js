@@ -12,7 +12,7 @@ function VendorsTitleBarStandard(props) {
     
     return(
         <div className="d-flex justify-content-between align-items-center">
-            <div className="h1">
+            <div className="h3">
                 {vendorsText[appContext.locale]["Vendors"]}
             </div>
             <div id="add-a-vendor-button">
