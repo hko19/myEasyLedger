@@ -164,6 +164,7 @@ function AccountTransactionsReportPage(props) {
                                             placeholder={incomeStatementRenderText[appContext.locale]["yyyy-mm-dd"]}
                                             className="form-control" value={datesToRequest.startDate}
                                             onChange={event => handleChangeStartDate(event.target.value)}
+                                            style={{ colorScheme: appContext.colorScheme === 'dark' ? 'dark' : 'light' }}
                                         />
                                     </div>
                                     <label className="my-0 text-end col-1 px-2">
@@ -175,6 +176,7 @@ function AccountTransactionsReportPage(props) {
                                             placeholder={incomeStatementRenderText[appContext.locale]["yyyy-mm-dd"]}
                                             className="form-control" value={datesToRequest.endDate}
                                             onChange={event => handleChangeEndDate(event.target.value)}
+                                            style={{ colorScheme: appContext.colorScheme === 'dark' ? 'dark' : 'light' }}
                                         />
                                     </div>
                                 </div>
@@ -219,6 +221,7 @@ function AccountTransactionsReportPage(props) {
                                         className="form-control"
                                         value={datesToRequest.startDate}
                                         onChange={event => handleChangeStartDate(event.target.value)}
+                                        style={{ colorScheme: appContext.colorScheme === 'dark' ? 'dark' : 'light' }}
                                     />
                                 </div>
                                 <div className="d-flex justify-content-between text-start align-items-center mb-2">
@@ -231,6 +234,7 @@ function AccountTransactionsReportPage(props) {
                                         className="form-control"
                                         value={datesToRequest.endDate}
                                         onChange={event => handleChangeEndDate(event.target.value)}
+                                        style={{ colorScheme: appContext.colorScheme === 'dark' ? 'dark' : 'light' }}
                                     />
                                 </div>
                                 <div className="d-flex mb-2 justify-content-between">
