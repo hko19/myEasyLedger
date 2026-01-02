@@ -5,3 +5,4 @@ rest_api/Documentation/.obsidian
 front_end/deploy.sh
 /front_end/build
 /.metadata/
+rest_api/.metadata
