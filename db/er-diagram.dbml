@@ -1,0 +1,256 @@
+// Use this DBML to draw ER diagram using dbdiagram.io
+// Docs: https://dbml.dbdiagram.io/docs
+
+Table account {
+  id bigint [pk, not null]
+  name "character varying(64)"
+  account_subtype_id bigint
+  deleted boolean [default: false]
+  debit_total numeric
+  credit_total numeric
+  initial_debit_amount numeric
+  initial_credit_amount numeric
+  organization_id bigint
+  has_children boolean
+  parent_account_id bigint
+  account_code "character varying(16)"
+  income_statement_format_position_id bigint
+  cash_flow_format_position_id bigint
+  balance_sheet_format_position_id bigint
+  cash_item boolean
+  relevant_to_taxes_paid boolean
+  relevant_to_interest_paid boolean
+  relevant_to_dividends_paid boolean
+  relevant_to_depreciation_amortization boolean
+
+  Indexes {
+    income_statement_format_position_id [name: "fki_account_ income_statement_format_position_id_fkey"]
+    account_subtype_id [name: "fki_account_account_group_id_fkey"]
+    balance_sheet_format_position_id [name: "fki_account_balance_sheet_format_position_id_fkey"]
+    cash_flow_format_position_id [name: "fki_account_cash_flow_format_position_id_fkey"]
+    organization_id [name: "fki_account_organization_id_fkey"]
+    parent_account_id [name: "fki_account_parent_account_id_fkey"]
+  }
+}
+
+Table account_subtype {
+  id bigint [pk, not null]
+  name "character varying(64)"
+  account_type_id bigint
+  income_statement_format_position_id bigint
+  cash_flow_format_position_id bigint
+  balance_sheet_format_position_id bigint
+  cash_item boolean
+  relevant_to_taxes_paid boolean
+  relevant_to_interest_paid boolean
+  relevant_to_dividends_paid boolean
+  relevant_to_depreciation_amortization boolean
+
+  Indexes {
+    account_type_id [name: "fki_account_subtype_account_type_id_fkey"]
+    balance_sheet_format_position_id [name: "fki_account_subtype_balance_sheet_format_position_id_fkey"]
+    cash_flow_format_position_id [name: "fki_account_subtype_cash_flow_format_position_id_fkey"]
+    income_statement_format_position_id [name: "fki_account_subtype_income_statement_format_position_id_fkey"]
+  }
+}
+
+Table account_type {
+  id bigint [pk, not null]
+  name "character varying(64)"
+}
+
+Table balance_sheet_format_position {
+  id bigint [pk, not null]
+  name "character varying(64)"
+}
+
+Table cash_flow_format_position {
+  id bigint [pk, not null]
+  name "character varying(64)"
+}
+
+Table income_statement_format_position {
+  id bigint [pk, not null]
+  name "character varying(64)"
+}
+
+Table organization {
+  id bigint [pk, not null]
+  name "character varying(64)"
+  currency "character varying(64)"
+  is_enterprise boolean
+  fiscal_year_begin date
+  lock_initial_account_values boolean [default: true]
+  lock_journal_entries_before date [default: '2000-01-01']
+  initial_retained_earnings numeric [default: 0]
+}
+
+Table customer {
+  id bigint [pk, not null]
+  customer_name "character varying(64)"
+  contact_name "character varying(64)"
+  email "character varying(64)"
+  organization_id bigint
+  phone_number "character varying(64)"
+
+  Indexes {
+    organization_id [name: "fki_customer_organization_id_fkey"]
+  }
+}
+
+Table vendor {
+  id bigint [pk, not null]
+  vendor_name "character varying(64)"
+  contact_name "character varying(64)"
+  email "character varying(64)"
+  organization_id bigint
+  phone_number "character varying(64)"
+
+  Indexes {
+    organization_id [name: "fki_vendor_organization_id_fkey"]
+  }
+}
+
+Table journal_entry {
+  id bigint [pk, not null]
+  journal_entry_date date [not null]
+  description character_varying [not null]
+  organization_id bigint [not null]
+  person_id bigint [not null]
+  deleted boolean [default: false]
+  year_month integer [not null]
+  vendor_id bigint
+  customer_id bigint
+
+  Indexes {
+    customer_id [name: "fki_journal_entry_customer_id_fkey"]
+    organization_id [name: "fki_journal_entry_organization_id_fkey"]
+    person_id [name: "fki_journal_entry_person_id_fkey"]
+    vendor_id [name: "fki_journal_entry_vendor_id_fkey"]
+    year_month [name: "journal_entry_year_month_index"]
+  }
+}
+
+Table line_item {
+  id bigint [pk, not null]
+  journal_entry_id bigint [not null]
+  is_credit boolean [not null]
+  amount numeric [not null]
+  description "character varying(255)" [not null]
+  account_id bigint [not null]
+
+  Indexes {
+    account_id [name: "fki_line_item_account_id_fkey"]
+    journal_entry_id [name: "fki_line_item_journal_entry_id_fkey"]
+  }
+}
+
+Table journal_entry_log {
+  id bigint [pk, not null]
+  datetime_of_edit "timestamp with time zone"
+  person_id bigint
+  journal_entry_id bigint
+  snapshot json
+  organization_id bigint
+
+  Indexes {
+    journal_entry_id [name: "fki_journal_entry_log_journal_entry_id_fkey"]
+    person_id [name: "fki_journal_entry_log_person_id_fkey"]
+  }
+}
+
+Table person {
+  id bigint [pk, not null]
+  first_name "character varying(64)"
+  last_name "character varying(64)"
+  email "character varying(64)" [not null]
+  password "character varying(64)" [not null]
+  enabled boolean
+  locale "character varying(64)"
+  current_organization_id bigint
+  appearance "character varying(16)"
+  datetime_created "timestamp with time zone"
+  datetime_enabled "timestamp with time zone"
+  results_per_page integer [default: 10]
+}
+
+Table role {
+  id bigint [pk, not null]
+  name "character varying(25)"
+}
+
+Table person_role {
+  person_id bigint
+  role_id bigint
+
+  Indexes {
+    person_id [name: "fki_person_role_person_id_fkey"]
+    role_id [name: "fki_person_role_role_id_fkey"]
+  }
+}
+
+Table permission {
+  id bigint [pk, not null]
+  person_id bigint
+  organization_id bigint
+  permission_type_id bigint
+
+  Indexes {
+    organization_id [name: "fki_organization_person_organization_id_fkey"]
+    person_id [name: "fki_organization_person_person_id_fkey"]
+    permission_type_id [name: "fki_permission_permission_type_id_fkey"]
+  }
+}
+
+Table permission_type {
+  id bigint [pk, not null]
+  name "character varying(64)"
+}
+
+Table verification_token {
+  id bigint [pk, not null]
+  token "character varying(255)" [unique]
+  expiry_date "timestamp without time zone"
+  person_id bigint [not null, unique]
+
+  Indexes {
+    person_id [name: "fki_verification_token_person_id_fkey"]
+  }
+}
+
+// Relationships (Foreign Keys)
+
+Ref: account.income_statement_format_position_id > income_statement_format_position.id
+Ref: account.account_subtype_id > account_subtype.id
+Ref: account.balance_sheet_format_position_id > balance_sheet_format_position.id
+Ref: account.cash_flow_format_position_id > cash_flow_format_position.id
+Ref: account.organization_id > organization.id
+Ref: account.parent_account_id > account.id // Self-referencing
+
+Ref: account_subtype.account_type_id > account_type.id
+Ref: account_subtype.balance_sheet_format_position_id > balance_sheet_format_position.id
+Ref: account_subtype.cash_flow_format_position_id > cash_flow_format_position.id
+Ref: account_subtype.income_statement_format_position_id > income_statement_format_position.id
+
+Ref: customer.organization_id > organization.id
+Ref: vendor.organization_id > organization.id
+
+Ref: journal_entry.customer_id > customer.id
+Ref: journal_entry.organization_id > organization.id
+Ref: journal_entry.person_id > person.id
+Ref: journal_entry.vendor_id > vendor.id
+
+Ref: line_item.account_id > account.id
+Ref: line_item.journal_entry_id > journal_entry.id
+
+Ref: journal_entry_log.journal_entry_id > journal_entry.id
+Ref: journal_entry_log.person_id > person.id
+
+Ref: permission.organization_id > organization.id
+Ref: permission.person_id > person.id
+Ref: permission.permission_type_id > permission_type.id
+
+Ref: person_role.person_id > person.id
+Ref: person_role.role_id > role.id
+
+Ref: verification_token.person_id > person.id
