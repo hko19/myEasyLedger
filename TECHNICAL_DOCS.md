@@ -1,16 +1,42 @@
 # Technical Documentation: myEasyLedger
 
-This document provides a comprehensive technical overview of the myEasyLedger system, designed for senior engineers and new team members.
+This document provides a comprehensive technical overview of the myEasyLedger system, designed for senior engineers and new team members. It serves as a high-utility maintenance guide and architectural reference.
 
-## 1. Architecture & Visualization
+## Table of Contents
+1.  [Architecture Overview](#1-architecture-overview)
+2.  [Path of a Request](#2-path-of-a-request)
+3.  [State Management & Data Flow](#3-state-management--data-flow)
+4.  [Critical Modules & Hot Paths](#4-critical-modules--hot-paths)
+5.  [Side Effects & Integrations](#5-side-effects--integrations)
+6.  [Extension Guide](#6-extension-guide)
+7.  [Dependency Analysis](#7-dependency-analysis)
+8.  [Key Modules](#8-key-modules)
+9.  [API / Interface Map](#9-api--interface-map)
+10. [Developer Onboarding](#10-developer-onboarding)
+
+---
+
+## 1. Architecture Overview
 
 ### High-Level System Overview
-The system follows a classic three-tier architecture: a React-based frontend, a Spring Boot backend, and a PostgreSQL database.
+The system follows a classic **three-tier architecture**:
+*   **Frontend**: A single-page application (SPA) built with React 17.
+*   **Backend**: A RESTful API built with Spring Boot (Java 8).
+*   **Data Store**: A PostgreSQL database for persistent storage.
 
 ![System Overview](docs/assets/system_overview.png)
 
+### Design Patterns
+*   **Controller-Service-Repository**: The backend follows this pattern to separate concerns:
+    *   **Controllers** handle HTTP requests, input validation, and DTO mapping.
+    *   **Services** contain core business logic and transactional boundaries.
+    *   **Repositories** manage data access using Spring Data JPA.
+*   **DTO & ViewModel**:
+    *   **DTOs (Data Transfer Objects)** are used for incoming request bodies to decouple the API from the database schema.
+    *   **ViewModels** are specialized objects used for outgoing responses, often aggregating data from multiple entities (especially in reports).
+
 ### Authentication Flow
-Authentication is handled via JWT (JSON Web Tokens). The backend uses Spring Security to protect endpoints, and the frontend manages tokens in memory and local storage.
+Authentication is handled via **JWT (JSON Web Tokens)**. The backend uses Spring Security to protect endpoints, and the frontend manages tokens in local storage.
 
 ![Authentication Flow](docs/assets/auth_flow.png)
 
@@ -39,6 +65,42 @@ graph TD
     Journal --> AddEntryModal
 ```
 
+---
+
+## 2. Path of a Request
+
+Tracing a standard data flow: **Creating a Journal Entry (Enterprise Mode)**.
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant React_UI as JournalEntryModal (React)
+    participant Axios
+    participant Controller as JournalEntryController (Spring)
+    participant Service as JournalEntryService
+    participant Auth as AuthorizationService
+    participant Repo as Repositories (JPA)
+    participant DB as PostgreSQL
+
+    User->>React_UI: Fill entry & Submit
+    React_UI->>Axios: POST /journalEntry (JournalEntryDTO)
+    Axios->>Controller: HTTP POST
+    Controller->>Auth: authorizeEditPermissions(...)
+    Auth-->>Controller: Success
+    Controller->>Service: createJournalEntryFromDTO(dto)
+    Service->>Service: Convert DTO to Entities (JournalEntry, LineItems)
+    Controller->>Controller: checkLockDate(...)
+    Controller->>Service: assertAccountingBalance(...)
+    Service-->>Controller: True (Balanced)
+    Controller->>Repo: save(JournalEntry & LineItems)
+    Repo->>DB: INSERT / UPDATE
+    Controller->>Repo: save(JournalEntryLog)
+    Repo->>DB: INSERT
+    Controller-->>Axios: 201 Created (JournalEntryDTO)
+    Axios-->>React_UI: Update State / Show Success Toast
+    React_UI-->>User: Entry visible in table
+```
+
 ### Journal Entry State Transition
 Simplified logic for creating and editing journal entries.
 
@@ -56,7 +118,67 @@ stateDiagram-v2
 
 ---
 
-## 2. Dependency Analysis
+## 3. State Management & Data Flow
+
+### Frontend State
+*   **Global Context**: The `PageSettings` context (located in `app.jsx`) acts as the global state store. It holds:
+    *   User identification (`personId`, `firstName`, `lastName`).
+    *   Current session context (`currentOrganizationId`, `currentPermissionTypeId`).
+    *   Application preferences (`locale`, `appearance`, `colorScheme`).
+*   **Persistence**: The JWT is stored in `localStorage` under the key `ACCESS_TOKEN`. On app load, `checkForAuthentication()` validates this token and re-populates the context.
+
+### Backend State
+*   **Stateless Security**: The backend is primarily stateless. Each request must carry a valid JWT in the `Authorization` header.
+*   **Security Context**: The `JwtAuthenticationFilter` intercepts requests, extracts the user details, and populates the `SecurityContextHolder` with a `UserPrincipal`.
+
+---
+
+## 4. Critical Modules & Hot Paths
+
+These modules are core to the application's integrity and are frequently modified:
+
+*   **`JournalEntryService`**: Manages the creation and update of double-entry ledger records. Any changes here must ensure that the "Debits = Credits" invariant is never violated.
+*   **`ReportsService`**: The engine for generating financial statements. It handles complex aggregations for:
+    *   **Balance Sheet**: Uses `negateAmountsOfAccounts` to adjust for standard accounting representation.
+    *   **Income Statement**: Manages fiscal year boundaries and retained earnings calculations.
+    *   **Cash Flow Statement**: Categorizes accounts into Operating, Investing, and Financing activities.
+*   **`AuthorizationService`**: The gatekeeper for organization-level security. It verifies that users have `VIEW`, `EDIT`, or `ADMIN` permissions before any data operation.
+
+---
+
+## 5. Side Effects & Integrations
+
+### External Integrations
+*   **Email Service**: `EmailDispatchService` handles all transactional emails (Account Verification, Invitations, Password Resets). It uses Thymeleaf templates for localized HTML emails.
+    *   *Note: Emails are currently sent synchronously. Large batches may impact response times.*
+
+### Internal Side Effects
+*   **Journal Entry Logging**: Every create, update, or delete operation on a journal entry triggers an automatic entry in the `JournalEntryLog` table for audit purposes.
+*   **JWT Lifecycle**: The `JwtTokenProvider` manages the generation and parsing of tokens, including expiration logic.
+
+---
+
+## 6. Extension Guide
+
+### Adding a New Feature
+To implement a new feature (e.g., "Budgeting"), follow this standard path:
+
+1.  **Backend Implementation**:
+    *   **Model**: Create a `@Entity` in `com.easyledger.api.model`.
+    *   **DTO**: Define a request DTO in `dto/`.
+    *   **Repository**: Create an interface extending `JpaRepository` in `repository/`.
+    *   **Service**: Implement business logic and validation in `service/`.
+    *   **ViewModel**: Create a response DTO in `viewmodel/` if the output differs from the input.
+    *   **Controller**: Define REST endpoints in `controller/`. Use `@Secured` for role protection.
+
+2.  **Frontend Implementation**:
+    *   **Page**: Create a new component directory in `front_end/src/pages/`.
+    *   **Route**: Register the new path in `front_end/src/config/page-route.jsx`.
+    *   **Menu**: Add the link to `enterpriseMenu` or `personalMenu` in `front_end/src/components/sidebar/menu.jsx`.
+
+---
+
+## 7. Dependency Analysis
 
 ### Backend (Spring Boot)
 - **Spring Boot Starter Web**: Core for building RESTful APIs.
@@ -65,7 +187,6 @@ stateDiagram-v2
 - **Spring Security**: Robust authentication and authorization framework.
 - **JJWT (io.jsonwebtoken)**: Implementation for generating and parsing JWTs.
 - **Spring Mail**: Service for sending emails (registration, password reset).
-- **Hibernate Types**: Extra types for Hibernate (e.g., JSONB support if needed).
 
 ### Frontend (React)
 - **React 17**: Core UI library.
@@ -73,11 +194,10 @@ stateDiagram-v2
 - **Axios**: HTTP client for API requests.
 - **Bootstrap / Reactstrap**: UI styling and components.
 - **ApexCharts / Chart.js**: Data visualization for reports and dashboard.
-- **JWT Decode**: Utility to decode JWT payloads on the client side.
 
 ---
 
-## 3. Key Modules
+## 8. Key Modules
 
 ### Backend (`rest_api/src/main/java/com/easyledger/api/`)
 - **`controller`**: Defines REST endpoints and handles incoming HTTP requests.
@@ -85,8 +205,7 @@ stateDiagram-v2
 - **`repository`**: JPA repositories for data access.
 - **`model`**: Entity classes representing the database schema.
 - **`security`**: Configuration for JWT, CORS, and endpoint protection.
-- **`dto` / `payload` / `viewmodel`**: Objects for data transfer between layers and to the frontend.
-- **`exception`**: Custom exception classes and global error handling.
+- **`dto` / `payload` / `viewmodel`**: Objects for data transfer between layers.
 
 ### Frontend (`front_end/src/`)
 - **`pages/`**: Main view components corresponding to routes (Dashboard, Accounts, etc.).
@@ -96,7 +215,7 @@ stateDiagram-v2
 
 ---
 
-## 4. API / Interface Map
+## 9. API / Interface Map
 
 | Controller | Responsibility | Key Endpoints |
 | :--- | :--- | :--- |
@@ -109,7 +228,7 @@ stateDiagram-v2
 
 ---
 
-## 5. Developer Onboarding
+## 10. Developer Onboarding
 
 ### Environment Setup
 
