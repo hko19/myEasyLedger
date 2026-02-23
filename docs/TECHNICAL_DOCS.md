@@ -11,7 +11,7 @@ This document provides a comprehensive technical overview of the myEasyLedger sy
 6.  [Side Effects & Integrations](#6-side-effects--integrations)
 7.  [Extension Guide](#7-extension-guide)
 8.  [Dependency Analysis](#8-dependency-analysis)
-9.  [Key Modules](#9-key-modules)
+9.  [File Structure](#9-file-structure)
 10. [API / Interface Map](#10-api--interface-map)
 11. [Developer Onboarding](#11-developer-onboarding)
 
@@ -218,21 +218,28 @@ To implement a new feature (e.g., "Budgeting"), follow this standard path:
 
 ---
 
-## 9. Key Modules
+## 9. File Structure
 
 ### Backend (`rest_api/src/main/java/com/easyledger/api/`)
-- **`controller`**: Defines REST endpoints and handles incoming HTTP requests.
-- **`service`**: Contains business logic, ensuring separation from the web layer.
-- **`repository`**: JPA repositories for data access.
-- **`model`**: Entity classes representing the database schema.
-- **`security`**: Configuration for JWT, CORS, and endpoint protection.
-- **`dto` / `payload` / `viewmodel`**: Objects for data transfer between layers.
+- **`configuration`**: Global Spring Boot configuration classes (Security, CORS, Mail).
+- **`controller`**: REST API endpoints that handle incoming HTTP requests.
+- **`dto`**: Data Transfer Objects for structured request and response bodies.
+- **`exception`**: Custom exception classes and global error handling logic.
+- **`mail`**: Low-level email implementation details and service classes.
+- **`model`**: JPA entity classes representing the database schema.
+- **`payload`**: Specific request/response payloads for authentication and registration.
+- **`repository`**: JPA repositories for database access and custom queries.
+- **`security`**: JWT provider, user principal, and authorization logic.
+- **`service`**: Core business logic and transactional operations.
+- **`utility`**: Helper classes and enums used across the application.
+- **`viewmodel`**: Specialized objects for complex report outputs and data views.
 
 ### Frontend (`front_end/src/`)
-- **`pages/`**: Main view components corresponding to routes (Dashboard, Accounts, etc.).
-- **`components/`**: Reusable UI elements (Headers, Sidebars, Modals).
-- **`config/`**: Routing definitions and global application settings.
-- **`utils/`**: Helper functions, i18n, and Axios interceptors for auth headers.
+- **`assets`**: Static files such as CSS, images, and fonts.
+- **`components`**: Reusable UI elements like headers, sidebars, and tables.
+- **`config`**: Global application settings, routing definitions, and context providers.
+- **`pages`**: Full-page components corresponding to application routes.
+- **`utils`**: Helper functions, internationalization (i18n), and API interceptors.
 
 ---
 
