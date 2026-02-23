@@ -24,7 +24,7 @@ The system follows a classic **three-tier architecture**:
 *   **Backend**: A RESTful API built with Spring Boot (Java 8).
 *   **Data Store**: A PostgreSQL database for persistent storage.
 
-![System Overview](docs/assets/system_overview.png)
+![System Overview](assets/system_overview.png)
 
 ### Design Patterns
 *   **Controller-Service-Repository**: The backend follows this pattern to separate concerns:
@@ -38,12 +38,12 @@ The system follows a classic **three-tier architecture**:
 ### Authentication Flow
 Authentication is handled via **JWT (JSON Web Tokens)**. The backend uses Spring Security to protect endpoints, and the frontend manages tokens in local storage.
 
-![Authentication Flow](docs/assets/auth_flow.png)
+![Authentication Flow](assets/auth_flow.png)
 
 ### Core Domain Model
 The following diagram illustrates the primary entities and their relationships within the system.
 
-![Domain Model](docs/assets/domain_model.png)
+![Domain Model](assets/domain_model.png)
 
 ### Component Hierarchy (Frontend)
 The React application is structured around pages and reusable components.

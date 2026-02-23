@@ -6,6 +6,7 @@ myEasyLedger is a full-stack responsive webapp that allows users to keep track o
 - [Features](#features)
 - [Tech stack](#tech-stack)
 - [Dev setup](#dev-setup)
+- [Technical Documentation](docs/TECHNICAL_DOCS.md)
 
 ## Features
 - Full authentication with JWT
@@ -27,11 +28,11 @@ myEasyLedger is a full-stack responsive webapp that allows users to keep track o
 ## Tech Stack
 - Front end
     - Certain assets from Color Admin 4.6
-    - Bootstrap 4
-    - React.js
+    - Bootstrap 5
+    - React 17
 - Back end
     - Spring
-        - Spring Boot 2.2.6
+        - Spring Boot 2.6.1
         - Spring Security
         - Spring Mail
         - Thymeleaf
@@ -81,10 +82,10 @@ Now use pgAdmin4 (or some other method) to...
 1. If you are not beginning from an empty schema, drop-cascade your 'public' schema and create a new one.
 2. You may need to configure PgAdmin's binary paths if this is a fresh installation of PostgreSQL. Click "Dashboard" on the toolbar at the top of the page, and click "Configure PgAdmin" on the dashboard. From the sidebar, choose Paths -> Binary Paths, and in the "PostgreSQL Binary Path" field, enter the path to your pg_dump and pg_restore utilities. By default on MacOS this is `/Library/PostgreSQL/13/bin`. Click save.
 3. Right click on the 'public' schema and click "Restore..."
-4. Change "Format" to "All Files", and restore from the Easy_Ledger/db/db_schema_and_metadata file for an clean db, or Easy_Ledger/db/db_full for sample data.
+4. Change "Format" to "All Files", and restore from the `db/db_schema_and_metadata` file for an clean db, or `db/db_full` for sample data.
 
 ##### ER diagram for DB
-An ER diagram for this db can be found in Easy_Ledger/db and will be named "ER vX.X.xml". This file can be opened at https://online.visual-paradigm.com/ - requires a free account.
+An ER diagram for this db can be found in the `db/` directory. This file can be opened at https://online.visual-paradigm.com/ - requires a free account.
 
 ### Backend Development Environment Setup
 The recommended IDE for this project is Spring Tool Suite 4 for Eclipse. STS can be downloaded at https://spring.io/tools and includes a full Eclipse-based IDE.
@@ -94,12 +95,12 @@ Alternatively, install Spring Tool Suite 4 on an existing installation of Eclips
 #### Open the project in STS4:
 1. File > Open Projects from File System
 2. Click the “Directory…” button
-3. Select /Easy_Ledger/rest_api, then click open
+3. Select `rest_api/`, then click open
 4. Click Finish
 5. STS may take a few moments to update dependencies for the project build.
 
 #### Setting up application properties
-You will need to configure the application properties of the backend before launching the app. The application properties file is found in the following directory: `Easy_Ledger/rest_api/src/main/resources/application.properties`.
+You will need to configure the application properties of the backend before launching the app. The application properties file is found in the following directory: `rest_api/src/main/resources/application.properties`.
 - `spring.datasource.url` should be set to `jdbc:postgresql://[YOUR DATABASE URL HERE]`. If you are running PostgreSQL on a local machine and have set it up according to the previous instructions, this should be set to `jdbc:postgresql://localhost:5432/easyledger`.
 - `spring.datasource.password` should be set to the password that you set up for the 'easyledger' database. The default password in the `application.properties` file is `KoPostgres`, but you should change this to your own database password.
 - `app.jwtSecret` should be set to your API signing key.
@@ -136,13 +137,13 @@ You will need to have NodeJS 14 installed, which can be found [here](https://nod
 
 When running for the first time, initialize the frontend in the terminal by issuing the following commands: 
 ```
-$ cd {filepath}/Easy_Ledger/front_end
+$ cd front_end
 $ npm install
 ```
 
 To start the front end, run the following commands: 
 ```
-$ cd {filepath}/Easy_Ledger/front_end
+$ cd front_end
 $ npm start 
 ```
 
